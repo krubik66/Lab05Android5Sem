@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Lab05</string>
+
+    <string name="menuLeft">Left</string>
+    <string name="menuRight">Right</string>
+    <string name="menuMain">Main</string>
+
+    <string name="beforeImage">I am at the top!</string>
+    <string name="mainContentDescription">noDescription</string>
+    <string name="afterImage1">I am higher!</string>
+    <string name="afterImage2">I am lower!</string>
+
+    <string name="tabLayout">tabLayout</string>
+    <string name="topTextFirstTab">Text above image:</string>
+    <string name="underImageTextInfo">Text under image:</string>
+    <string name="underImageText1">Higher text:</string>
+    <string name="underImageText2">Lower text:</string>
+    <string name="save">Save</string>
+
+    <string name="orc">Orc</string>
+    <string name="necromancer">Necromancer</string>
+    <string name="skeleton">Skeleton</string>
+
+    <string name="addListMenu">Add</string>
+    <string name="itemTitle">Item title</string>
+    <string name="itemDescription">Item description</string>
+    <string name="str">Strength</string>
+    <string name="danger">Is dangerous</string>
+    <string name="returnButton">Return</string>
+
+    <string name="CreateTitle">Create new minion</string>
+    <string name="Lich">Lich</string>
+    <string name="Skeleton">Skeleton</string>
+    <string name="Ghoul">Ghoul</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+</resources>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/firstFragment">
+
+
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.example.lab05.FirstFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_first" />
+    <fragment
+        android:id="@+id/secondFragment"
+        android:name="com.example.lab05.SecondFragment"
+        android:label="fragment_second"
+        tools:layout="@layout/fragment_second" />
+    <fragment
+        android:id="@+id/thirdFragment"
+        android:name="com.example.lab05.ThirdFragment"
+        android:label="fragment_third"
+        tools:layout="@layout/fragment_third" >
+        <action
+            android:id="@+id/action_thirdFragment_to_showDataFragment"
+            app:destination="@id/showDataFragment" />
+        <action
+            android:id="@+id/action_thirdFragment_to_addDataFragment"
+            app:destination="@id/addDataFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showDataFragment"
+        android:name="com.example.lab05.ShowDataFragment"
+        android:label="fragment_show_data"
+        tools:layout="@layout/fragment_show_data" >
+        <action
+            android:id="@+id/action_showDataFragment_to_editDataFragment"
+            app:destination="@id/editDataFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addDataFragment"
+        android:name="com.example.lab05.AddDataFragment"
+        android:label="fragment_add_data"
+        tools:layout="@layout/fragment_add_data" />
+
+    <action
+        android:id="@+id/action_global_firstFragment"
+        app:destination="@id/firstFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/firstFragment" />
+    <action
+        android:id="@+id/action_global_secondFragment"
+        app:destination="@id/secondFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/firstFragment" />
+    <action
+        android:id="@+id/action_global_thirdFragment"
+        app:destination="@id/thirdFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/firstFragment" />
+    <fragment
+        android:id="@+id/editDataFragment"
+        android:name="com.example.lab05.EditDataFragment"
+        android:label="EditDataFragment" >
+        <action
+            android:id="@+id/action_editDataFragment_to_thirdFragment"
+            app:destination="@id/thirdFragment" />
+    </fragment>
+</navigation>

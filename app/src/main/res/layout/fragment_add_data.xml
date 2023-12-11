@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddDataFragment">
+
+    <TextView
+        android:id="@+id/add_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CreateTitle"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/add_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="101dp"
+        android:ems="10"
+        android:hint="@string/itemTitle"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_title" />
+
+    <EditText
+        android:id="@+id/add_spec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="101dp"
+        android:ems="10"
+        android:hint="@string/itemDescription"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_name" />
+
+    <TextView
+        android:id="@+id/add_strength_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="182dp"
+        android:text="@string/str"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_spec" />
+
+    <RatingBar
+        android:id="@+id/add_strength_bar"
+        android:layout_width="239dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginEnd="88dp"
+        android:max="5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_strength_txt" />
+
+    <CheckBox
+        android:id="@+id/add_danger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/danger"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_strength_bar" />
+
+    <RadioGroup
+        android:id="@+id/radioAdd"
+        android:layout_width="220dp"
+        android:layout_height="145dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:checkedButton="@id/add_type_lich"
+        app:layout_constraintStart_toEndOf="@+id/add_danger"
+        app:layout_constraintTop_toBottomOf="@+id/add_strength_bar">
+
+        <RadioButton
+            android:id="@+id/add_type_lich"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Lich" />
+
+        <RadioButton
+            android:id="@+id/add_type_ghoul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Ghoul" />
+
+        <RadioButton
+            android:id="@+id/add_type_skeleton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Skeleton" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/add_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioAdd" />
+
+    <Button
+        android:id="@+id/add_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/cancel"
+        app:layout_constraintStart_toEndOf="@+id/add_save_button"
+        app:layout_constraintTop_toBottomOf="@+id/radioAdd" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
