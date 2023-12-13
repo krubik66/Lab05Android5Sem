@@ -10,9 +10,10 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun lstDao(): ListDao
 
     companion object {
+        @Volatile
         private var INSTANCE: AppDatabase? = null
-        @Synchronized
-        open fun getDatabase(context: Context): AppDatabase {
+
+        fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,

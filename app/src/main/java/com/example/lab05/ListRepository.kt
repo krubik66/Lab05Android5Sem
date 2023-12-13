@@ -1,8 +1,8 @@
 package com.example.lab05
 
 import android.content.Context
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ListRepository(
     context: Context
@@ -16,10 +16,9 @@ class ListRepository(
         myDao = myDb.lstDao()!!
 //        myDao.upsertItem(DatabaseItem())
 //        myDao.upsertItem(DatabaseItem())
-//        dataList = runBlocking {
-//            convertFlowToList(flow = getList())
-//        }
-        getList()
+
+//        getList()
+
     }
 
     companion object {
@@ -33,49 +32,40 @@ class ListRepository(
         }
     }
 
-    fun upsertItem(item: DatabaseItem) {
+    suspend fun upsertItem(item: DatabaseItem) = withContext(Dispatchers.IO) {
         myDao.upsertItem(item)
-        getList()
+//        getList()
     }
 
-    fun deleteItem(item: DatabaseItem) {
+    suspend fun deleteItem(item: DatabaseItem) = withContext(Dispatchers.IO) {
         myDao.deleteItem(item)
-        getList()
+//        getList()
     }
 
-    fun deleteWithId(id: Int) {
+    suspend fun deleteWithId(id: Int) = withContext(Dispatchers.IO) {
         myDao.deleteItemWithId(id.toString())
-        getList()
+//        getList()
     }
 
-    fun getList() {
+    suspend fun getList() = withContext(Dispatchers.IO) {
         dataList =  myDao.getItems()
     }
 
-    fun getchecked(): MutableList<DatabaseItem>? {
-        return myDao.getChecked()
+    suspend fun getAllItems(): List<DatabaseItem>? = withContext(Dispatchers.IO) {
+        return@withContext myDao.getItems()
     }
 
-    fun updateChecked(id: Int, checked: Boolean) {
+    suspend fun getChecked(): MutableList<DatabaseItem>? = withContext(Dispatchers.IO) {
+        return@withContext myDao.getChecked()
+    }
+
+    suspend fun updateChecked(id: Int, checked: Boolean) = withContext(Dispatchers.IO) {
         myDao.updateItemCheckedStatus(id, checked)
     }
 
-    fun updateItem(itemId: Int, name: String, spec:String, strength:Float, danger:Boolean) {
+    suspend fun updateItem(itemId: Int, name: String, spec:String, strength:Float, danger:Boolean) = withContext(Dispatchers.IO) {
         myDao.updateItem(itemId, name, spec, strength, danger)
-        getList()
-    }
-
-    private suspend fun convertFlowToList(flow: Flow<List<DatabaseItem>>): MutableList<DatabaseItem>? {
-        val resultList = mutableListOf<DatabaseItem>()
-
-        flow.collect { item ->
-            // Check if the item is not null before adding it to the list
-            item?.let {
-                resultList.addAll(it)
-            }
-        }
-
-        return resultList
+//        getList()
     }
 
 }

@@ -12,13 +12,13 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab05.databinding.FragmentThirdBinding
 import com.example.lab05.databinding.ListItemBinding
-import com.example.lab05.ListRepository
-import kotlinx.coroutines.flow.onEach
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +35,7 @@ class ThirdFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    lateinit var dataList: ListRepository
+    lateinit var myViewModel: MyViewModel
     private lateinit var adapter: MyAdapter
     private lateinit var _binding: FragmentThirdBinding
 
@@ -56,10 +56,17 @@ class ThirdFragment : Fragment() {
 
         val recView = _binding.recycleView
         recView.layoutManager = LinearLayoutManager(requireContext())
-
-        dataList = ListRepository.getInstance(requireContext())
-        adapter = MyAdapter(dataList.dataList!!)
+        val repository = ListRepository.getInstance(requireContext())
+        myViewModel = MyViewModel(repository)
+        adapter = MyAdapter(myViewModel.items)
         recView.adapter = adapter
+        myViewModel.items.observe(viewLifecycleOwner, Observer { items ->
+            // Update the adapter's data with the new list of items
+//            adapter.data = items.
+
+            // Notify the adapter that the dataset has changed
+            adapter.notifyDataSetChanged()
+        })
         _binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_thirdFragment_to_addDataFragment)
         }
@@ -78,9 +85,9 @@ class ThirdFragment : Fragment() {
                     val itemDanger = bundle.getBoolean("danger", false)
                     val itemType = bundle.getString("type", "Lich")
                     val newItem = DatabaseItem(itemName, itemSpec, itemStrength, itemType, itemDanger)
-                    dataList.upsertItem(newItem)
-                    adapter.notifyDataSetChanged()
-                    activity?.recreate()
+                    myViewModel.addItem(newItem)
+//                    adapter.notifyDataSetChanged()
+//                    activity?.recreate()
                 }
             }
         }
@@ -97,9 +104,9 @@ class ThirdFragment : Fragment() {
                     val pos = bundle.getInt("position")
 //                    dataList.deleteWithId(pos)
 //                    dataList.upsertItem(newItem)
-                    dataList.updateItem(pos, itemName, itemSpec, itemStrength.toFloat(), itemDanger)
-                    adapter.notifyDataSetChanged()
-                    activity?.recreate()
+                    myViewModel.updateItem(pos, itemName, itemSpec, itemStrength.toFloat(), itemDanger)
+//                    adapter.notifyDataSetChanged()
+//                    activity?.recreate()
                 }
             }
         }
@@ -116,26 +123,26 @@ class ThirdFragment : Fragment() {
         when (item.itemId){
             R.id.addListItemMenuButton -> {
                 showConfirmationDialog()
-                adapter.notifyDataSetChanged()
-                activity?.recreate()
+//                adapter.notifyDataSetChanged()
+//                activity?.recreate()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun deleteSelectedItems() {
-        val selectedItems = dataList.getchecked()
+        val selectedItems = myViewModel.itemsChecked.value
         selectedItems?.onEach {
-            dataList.deleteItem(it)
+            myViewModel.deleteItem(it)
         }
-        dataList.getList()
+//        myViewModel.getList()
 //        activity?.recreate()
     }
 
     private fun showConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirm Removal")
-        builder.setMessage("Are you sure you want to remove selected items from the list?")
+        builder.setTitle("Confirm delete")
+        builder.setMessage("Are you sure you want to remove those items?")
 
         builder.setPositiveButton("Yes") { _, _ ->
             // User clicked Yes, delete selected items
@@ -150,7 +157,7 @@ class ThirdFragment : Fragment() {
         dialog.show()
     }
 
-    inner class MyAdapter(var data: MutableList<DatabaseItem>) :
+    inner class MyAdapter(var data: LiveData<List<DatabaseItem>>) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         inner class MyViewHolder(viewBinding: ListItemBinding) :
             RecyclerView.ViewHolder(viewBinding.root) {
@@ -169,10 +176,11 @@ class ThirdFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return data.size
+            return data.value?.size ?: -1
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+            val data = data.value!!
             var currData = data[position]
             holder.txt1.text = currData.text_name
             holder.txt2.text = if (currData.text_spec == "Default specification") {
@@ -200,19 +208,26 @@ class ThirdFragment : Fragment() {
             }
             holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 currData.isChecked = isChecked
-                dataList.updateChecked(currData.id, isChecked)
+                myViewModel.checkItem(currData.id, isChecked)
             }
             holder.itemView.setOnLongClickListener {
-                dataList.deleteWithId(currData.id)
-                dataList.getList()
-                notifyDataSetChanged()
-                activity?.recreate()
+                myViewModel.deleteItemById(currData.id)
+//                myViewModel.getList()
+//                notifyDataSetChanged()
+//                activity?.recreate()
+
                 true
             }
             when(currData.item_type) {
                 "Lich" -> holder.img.setImageResource(R.drawable.playericon)
                 else -> holder.img.setImageResource(R.drawable.skeletonicon)
             }
+
+//            onMealActionButtonClick = { meal ->
+//                coroutineScope.launch {
+//                    viewModel.removeFromFavourites(meal)
+//                }
+//            }
         }
     }
 
