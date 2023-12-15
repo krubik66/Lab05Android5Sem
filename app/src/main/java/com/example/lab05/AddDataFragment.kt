@@ -66,7 +66,7 @@ class AddDataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //changing race depending on item checked
-        var race: String = "Human"
+        var race: String = "Lich"
         addType.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 _binding.addTypeLich.id -> race = "Lich"
