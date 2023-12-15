@@ -12,10 +12,13 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab05.databinding.FragmentThirdBinding
 import com.example.lab05.databinding.ListItemBinding
@@ -35,7 +38,7 @@ class ThirdFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    lateinit var myViewModel: MyViewModel
+    val myViewModel: MyViewModel by activityViewModels { MyViewModel.Factory }
     private lateinit var adapter: MyAdapter
     private lateinit var _binding: FragmentThirdBinding
 
@@ -56,16 +59,16 @@ class ThirdFragment : Fragment() {
 
         val recView = _binding.recycleView
         recView.layoutManager = LinearLayoutManager(requireContext())
-        val repository = ListRepository.getInstance(requireContext())
-        myViewModel = MyViewModel(repository)
-        adapter = MyAdapter(myViewModel.items)
+
+        adapter = MyAdapter()
         recView.adapter = adapter
         myViewModel.items.observe(viewLifecycleOwner, Observer { items ->
             // Update the adapter's data with the new list of items
 //            adapter.data = items.
 
             // Notify the adapter that the dataset has changed
-            adapter.notifyDataSetChanged()
+//            adapter.notifyDataSetChanged()
+            adapter.submitList(items)
         })
         _binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_thirdFragment_to_addDataFragment)
@@ -86,6 +89,7 @@ class ThirdFragment : Fragment() {
                     val itemType = bundle.getString("type", "Lich")
                     val newItem = DatabaseItem(itemName, itemSpec, itemStrength, itemType, itemDanger)
                     myViewModel.addItem(newItem)
+
 //                    adapter.notifyDataSetChanged()
 //                    activity?.recreate()
                 }
@@ -157,8 +161,18 @@ class ThirdFragment : Fragment() {
         dialog.show()
     }
 
-    inner class MyAdapter(var data: LiveData<List<DatabaseItem>>) :
-        RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    private val DiffCallback = object : DiffUtil.ItemCallback<DatabaseItem>() {
+        override fun areItemsTheSame(oldItem: DatabaseItem, newItem: DatabaseItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: DatabaseItem, newItem: DatabaseItem): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    inner class MyAdapter() :
+        ListAdapter<DatabaseItem, MyAdapter.MyViewHolder>(DiffCallback) {
         inner class MyViewHolder(viewBinding: ListItemBinding) :
             RecyclerView.ViewHolder(viewBinding.root) {
             val txt1: TextView = viewBinding.itemTitle
@@ -175,13 +189,14 @@ class ThirdFragment : Fragment() {
             return MyViewHolder(viewBinding)
         }
 
-        override fun getItemCount(): Int {
-            return data.value?.size ?: -1
-        }
+//        override fun getItemCount(): Int {
+//            return itemCount
+//        }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            val data = data.value!!
-            var currData = data[position]
+//            val data = data.value!!
+//            var currData = data[position]
+            var currData = getItem(position)
             holder.txt1.text = currData.text_name
             holder.txt2.text = if (currData.text_spec == "Default specification") {
                 (currData.item_type + " " + currData.text_spec + " " + currData.item_strength)

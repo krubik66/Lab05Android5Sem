@@ -1,18 +1,25 @@
 package com.example.lab05
 
+import android.content.Context
+import android.text.Spannable.Factory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.launch
 
-class MyViewModel(private val repository: ListRepository) : ViewModel() {
+class MyViewModel(context: Context) : ViewModel() {
 
     private val _items = MutableLiveData<List<DatabaseItem>>()
     val items: LiveData<List<DatabaseItem>> get() = _items
 
     private val _itemsChecked = MutableLiveData<List<DatabaseItem>>()
     val itemsChecked: LiveData<List<DatabaseItem>> get() = _itemsChecked
+
+    val repository = ListRepository.getInstance(context)
 
     init {
         viewModelScope.launch {
@@ -54,6 +61,18 @@ class MyViewModel(private val repository: ListRepository) : ViewModel() {
             repository.deleteWithId(id)
             _items.value = repository.getAllItems()
         }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object
+            : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>
+                                                , extras: CreationExtras): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                return MyViewModel(application.applicationContext) as T
+            }
+            }
     }
 
 }

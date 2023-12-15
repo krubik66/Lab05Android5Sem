@@ -35,4 +35,8 @@ class DatabaseItem {
         dangerous = danger
 
     }
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
 }

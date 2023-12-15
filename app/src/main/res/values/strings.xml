@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Lab05</string>
 
-    <string name="menuLeft">Left</string>
-    <string name="menuRight">Right</string>
+    <string name="menuLeft">Swipe</string>
+    <string name="menuRight">List</string>
     <string name="menuMain">Main</string>
 
     <string name="beforeImage">I am at the top!</string>
